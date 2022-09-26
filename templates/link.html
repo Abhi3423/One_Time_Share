@@ -7,12 +7,33 @@
     <title>One Time Share</title>
 </head>
 <body>
-    <button onclick="download(1)" >DOWNLOAD</button>
+    <div class="row" id="boxes"></div>
     <p>Link is Generated!!...</p>
     <script>
         
-        name_json = {{ current_name | tojson}}
-        console.log(name_json)
+        var name_json
+
+        function ajax() {
+          var xhr = new XMLHttpRequest()
+          xhr.open('GET', '/static/json/pdf_name.json', true)
+    
+          xhr.onload = function () {
+            jsondata = JSON.parse(this.responseText)
+    
+            name_json = jsondata
+            console.log(name_json)
+          }
+          xhr.send()
+          return 0
+        }
+
+
+        async function run_js() {
+          const fist = await ajax()
+          const mytimeout = setTimeout(addbox, 1500)
+        }
+
+
         async function downloader(pointer) {
 
             const pdf_response = await fetch(`/show_link`, { method: 'POST', body: String(pointer), headers: { 'Content-Type': 'text/plain' } })
@@ -34,7 +55,27 @@
               a.remove();
             })
           }
-      
+
+          function addbox() {
+            console.log(name_json)
+            var nopdf = Object.keys(name_json).length
+            console.log(nopdf)
+            for (let i = 1; i < nopdf; i++) {
+              const div = document.createElement('div');
+
+              div.className = "col-md-4";
+
+
+             div.innerHTML = `<div class="mx-5 mt-4">
+                                <button href="#" class="btn btn-primary" onclick= "download(${i})">Download</button>
+                              </div>`;
+
+             document.getElementById('boxes').appendChild(div);
+
+             }
+          }
+          
+          run_js()
     </script>
 </body>
 </html>

@@ -37,20 +37,21 @@ def download(name_of_pdf):
         dict = i
      
     
+  
     
     chunks_cursor = db.fs.chunks.find({'files_id': dict['_id'] })
     
     for j in chunks_cursor:
         dict1 = j
-        # print(j)
+        
         
     # print(dict1['data'])    
-    # print(chunks_cursor)
+    
     
     k = dict1['data'].decode('utf-8')
     
     data_pdf = k.split(",")[1]
-    # print(data_pdf)
+   
     
     # decode = open("Copy - Copy.pdf", 'wb')
     return base64.b64decode(data_pdf)

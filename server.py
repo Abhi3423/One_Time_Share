@@ -1,5 +1,5 @@
-from flask import Flask, request,session,abort, redirect,render_template, jsonify
-from flask_cors import CORS, cross_origin
+from flask import Flask, request, redirect,render_template
+from flask_cors import CORS
 
 from Mongo import mongo_pdf, download
 import base64
@@ -35,21 +35,35 @@ def show():
         enc_pdf = pdf_base64['pdf'].encode('utf-8')
         
         mongo_pdf(encoded_pdf_utf, pdf_base64['pdf_name'])
+        
+        with open('./static/json/pdf_name.json', 'r') as v:
+         data_name = json.load(v)
+     
+        
+        data_length = len(data_name)
+        
+        data_name[data_length] = name_of_pdf
+        
+        with open('./static/json/pdf_name.json', 'w') as o:
+         json.dump(data_name, o)
     
-    return redirect("/show_link")
+    return render_template('Upload_page.html') 
         
 
-@app.route("/show_link",methods= ["GET","POST"])
+@app.route("/show_link",methods= ['GET','POST'])
 def gen_link():
-    
+    print("OK")
     if request.method == 'POST':
         pointer = request.get_data()
         
         pointer = pointer.decode('utf-8')
-            
+        with open('./static/json/pdf_name.json', 'r') as u:
+            name_of_pdf = json.load(u)
+           
         pdf_download_data = download(name_of_pdf[pointer])
+        
         return pdf_download_data
-    return render_template('link.html',current_name = name_of_pdf)
+    return render_template('link.html')
 
 
 if __name__ == '__main__':
