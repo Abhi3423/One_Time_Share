@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Time Share</title>
+</head>
+<body>
+    <button onclick="download(1)" >DOWNLOAD</button>
+    <p>Link is Generated!!...</p>
+    <script>
+        
+        name_json = {{ current_name | tojson}}
+        console.log(name_json)
+        async function downloader(pointer) {
+
+            const pdf_response = await fetch(`/show_link`, { method: 'POST', body: String(pointer), headers: { 'Content-Type': 'text/plain' } })
+      
+            const response = await pdf_response.blob()
+      
+            return response
+          }
+      
+          function download(notation) {
+            downloader(notation).then(blob => {
+              var url = window.URL.createObjectURL(blob);
+              var a = document.createElement('a');
+              a.href = url;
+              note = String(notation)
+              a.download = name_json[note];
+              document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+              a.click();
+              a.remove();
+            })
+          }
+      
+    </script>
+</body>
+</html>
