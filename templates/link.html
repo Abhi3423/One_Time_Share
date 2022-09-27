@@ -55,19 +55,26 @@
               a.remove();
             })
           }
+          
+          function info(){
+            setTimeout(
+          function()
+          { window.open("/del_link","_self");}, 15000);
+          }
+
 
           function addbox() {
             console.log(name_json)
             var nopdf = Object.keys(name_json).length
             console.log(nopdf)
-            for (let i = 1; i < nopdf; i++) {
+            for (let i = nopdf-1; i < nopdf; i++) {
               const div = document.createElement('div');
 
               div.className = "col-md-4";
 
 
              div.innerHTML = `<div class="mx-5 mt-4">
-                                <button href="#" class="btn btn-primary" onclick= "download(${i})">Download</button>
+                                <button href="#" class="btn btn-primary" onclick= "download(${i});info();">Download</button>
                               </div>`;
 
              document.getElementById('boxes').appendChild(div);

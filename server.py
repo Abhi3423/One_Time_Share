@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect,render_template
 from flask_cors import CORS
 
-from Mongo import mongo_pdf, download
+from Mongo import delete, mongo_pdf, download
 import base64
 import json
 
@@ -64,6 +64,14 @@ def gen_link():
         
         return pdf_download_data
     return render_template('link.html')
+
+
+@app.route("/del_link",methods= ['GET','POST'])
+def del_link():
+    
+    delete(name_of_pdf)
+    
+    return render_template('info.html')
 
 
 if __name__ == '__main__':
